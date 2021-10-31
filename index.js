@@ -25,6 +25,7 @@ async function run(){
         const tourCollection = database.collection("places");
         const facilitiesCollection = database.collection("facilitis");
         const usersCollection = database.collection("users");
+        const ordersCollection = database.collection("orders");
 
         
         // GET API
@@ -48,6 +49,12 @@ async function run(){
           const facilitis = await cursor.toArray();
           res.send(facilitis);
         });
+        // GET API For orders
+        app.get('/orders', async(req, res) => {
+          const cursor = ordersCollection.find({});
+          const orders = await cursor.toArray();
+          res.send(orders);
+        });
         
         // POST API
         app.post('/places', async (req, res) => {
@@ -63,6 +70,21 @@ async function run(){
           console.log('hit The post')
           res.json(result)
         });
+
+        // POST Orders API
+        app.post('/orders', async (req, res) => {
+          const orders = req.body
+          const result = await ordersCollection.insertOne(orders);
+          console.log('hit The post')
+          res.json(result)
+        });
+
+        // Delete API
+        app.delete('/orders/:id', async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: objectId(id) };
+          res.json("result");
+        })
         
     }
     finally{
